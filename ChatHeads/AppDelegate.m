@@ -10,6 +10,9 @@
 
 #import "ViewController.h"
 
+#import "CHDraggableView.h"
+#import "CHDraggableView+Avatar.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -17,9 +20,26 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.viewController = [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
-    self.window.rootViewController = self.viewController;
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewController];
+    self.window.rootViewController = navigationController;
     [self.window makeKeyAndVisible];
+    
+    CHDraggableView *draggableView = [CHDraggableView draggableViewWithImage:[UIImage imageNamed:@"avatar.png"]];
+    draggableView.tag = 1;
+    
+    _draggingCoordinator = [[CHDraggingCoordinator alloc] initWithWindow:self.window draggableViewBounds:draggableView.bounds];
+    _draggingCoordinator.delegate = self;
+    draggableView.delegate = _draggingCoordinator;
+    
+    [self.window addSubview:draggableView];
+    
     return YES;
+}
+
+- (UIViewController *)draggingCoordinator:(CHDraggingCoordinator *)coordinator viewControllerForDraggableView:(CHDraggableView *)draggableView
+{
+    return [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

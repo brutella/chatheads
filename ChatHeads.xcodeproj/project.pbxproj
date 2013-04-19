@@ -18,6 +18,11 @@
 		667E35B017214105000B8445 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 667E35AF17214105000B8445 /* Default-568h@2x.png */; };
 		667E35B317214105000B8445 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667E35B217214105000B8445 /* ViewController.m */; };
 		667E35B617214105000B8445 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 667E35B417214105000B8445 /* ViewController.xib */; };
+		667E35BF17214146000B8445 /* CHDraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 667E35BE17214146000B8445 /* CHDraggableView.m */; };
+		667E35CB17214C0C000B8445 /* CHDraggingCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 667E35CA17214C0C000B8445 /* CHDraggingCoordinator.m */; };
+		667E35CF17215D52000B8445 /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 667E35CE17215D52000B8445 /* avatar.png */; };
+		667E35D217215E6B000B8445 /* CHAvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 667E35D117215E6B000B8445 /* CHAvatarView.m */; };
+		667E35D517215EDF000B8445 /* CHDraggableView+Avatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 667E35D417215EDF000B8445 /* CHDraggableView+Avatar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +42,15 @@
 		667E35B117214105000B8445 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		667E35B217214105000B8445 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		667E35B517214105000B8445 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		667E35BD17214146000B8445 /* CHDraggableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDraggableView.h; sourceTree = "<group>"; };
+		667E35BE17214146000B8445 /* CHDraggableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHDraggableView.m; sourceTree = "<group>"; };
+		667E35C917214C0C000B8445 /* CHDraggingCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDraggingCoordinator.h; sourceTree = "<group>"; };
+		667E35CA17214C0C000B8445 /* CHDraggingCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHDraggingCoordinator.m; sourceTree = "<group>"; };
+		667E35CE17215D52000B8445 /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
+		667E35D017215E6A000B8445 /* CHAvatarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHAvatarView.h; sourceTree = "<group>"; };
+		667E35D117215E6B000B8445 /* CHAvatarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHAvatarView.m; sourceTree = "<group>"; };
+		667E35D317215EDF000B8445 /* CHDraggableView+Avatar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CHDraggableView+Avatar.h"; sourceTree = "<group>"; };
+		667E35D417215EDF000B8445 /* CHDraggableView+Avatar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CHDraggableView+Avatar.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +97,8 @@
 		667E359F17214105000B8445 /* ChatHeads */ = {
 			isa = PBXGroup;
 			children = (
+				667E35CC17215D51000B8445 /* Resources */,
+				667E35BC17214114000B8445 /* Classes */,
 				667E35A817214105000B8445 /* AppDelegate.h */,
 				667E35A917214105000B8445 /* AppDelegate.m */,
 				667E35B117214105000B8445 /* ViewController.h */,
@@ -105,6 +121,37 @@
 				667E35AF17214105000B8445 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		667E35BC17214114000B8445 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				667E35D017215E6A000B8445 /* CHAvatarView.h */,
+				667E35D117215E6B000B8445 /* CHAvatarView.m */,
+				667E35BD17214146000B8445 /* CHDraggableView.h */,
+				667E35BE17214146000B8445 /* CHDraggableView.m */,
+				667E35D317215EDF000B8445 /* CHDraggableView+Avatar.h */,
+				667E35D417215EDF000B8445 /* CHDraggableView+Avatar.m */,
+				667E35C917214C0C000B8445 /* CHDraggingCoordinator.h */,
+				667E35CA17214C0C000B8445 /* CHDraggingCoordinator.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		667E35CC17215D51000B8445 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				667E35CD17215D52000B8445 /* Images */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		667E35CD17215D52000B8445 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				667E35CE17215D52000B8445 /* avatar.png */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +210,7 @@
 				667E35AE17214105000B8445 /* Default@2x.png in Resources */,
 				667E35B017214105000B8445 /* Default-568h@2x.png in Resources */,
 				667E35B617214105000B8445 /* ViewController.xib in Resources */,
+				667E35CF17215D52000B8445 /* avatar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,6 +224,10 @@
 				667E35A617214105000B8445 /* main.m in Sources */,
 				667E35AA17214105000B8445 /* AppDelegate.m in Sources */,
 				667E35B317214105000B8445 /* ViewController.m in Sources */,
+				667E35BF17214146000B8445 /* CHDraggableView.m in Sources */,
+				667E35CB17214C0C000B8445 /* CHDraggingCoordinator.m in Sources */,
+				667E35D217215E6B000B8445 /* CHAvatarView.m in Sources */,
+				667E35D517215EDF000B8445 /* CHDraggableView+Avatar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
