@@ -29,9 +29,9 @@
     return self;
 }
 
-- (void)snapToCenter:(CGPoint)point edge:(CGRectEdge)edge
+- (void)snapViewCenterToPoint:(CGPoint)point edge:(CGRectEdge)edge
 {
-    [self _snapToCenter:point edge:edge];
+    [self _snapViewCenterToPoint:point edge:edge];
 }
 
 #pragma mark - Override Touches
@@ -67,7 +67,6 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
     if (_scaledDown) {
         [self _beginReleaseAnimation];
     }
@@ -88,7 +87,7 @@
 #define CGPointIntegral(point) CGPointMake((int)point.x, (int)point.y)
 
 #define SNAP_ANIMATION_BOUNCE 0.04f
-- (void)_snapToCenter:(CGPoint)point edge:(CGRectEdge)edge
+- (void)_snapViewCenterToPoint:(CGPoint)point edge:(CGRectEdge)edge
 {
     CGPoint currentCenter = self.center;
     

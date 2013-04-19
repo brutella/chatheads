@@ -61,3 +61,10 @@ Based on the angle I calculated `deltaX = sin(angle) * bounceDistance` and `delt
 ![](Resources/math.pdf)
 
 The bubble is first animated to the bounce location and then to the end point.
+
+#### Avatar Drawing
+
+![](Resources/avatar.png)
+
+The drawing of the bubble is done in `CHAvatarView` by using an image and adding a black drop shadown and a white inner shadow.
+

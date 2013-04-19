@@ -138,14 +138,14 @@ typedef enum {
 - (void)_animateView:(CHDraggableView *)view toEdgePoint:(CGPoint)point
 {
     [_edgePointDictionary setObject:[NSValue valueWithCGPoint:point] forKey:@(view.tag)];
-    [view snapToCenter:point edge:[self _destinationEdgeForReleasePointInCurrentState:view.center]];
+    [view snapViewCenterToPoint:point edge:[self _destinationEdgeForReleasePointInCurrentState:view.center]];
 }
 
 - (void)_animateViewToConversationArea:(CHDraggableView *)view
 {
     CGRect conversationArea = [self _conversationArea];
     CGPoint center = CGPointMake(CGRectGetMidX(conversationArea), CGRectGetMidY(conversationArea));
-    [view snapToCenter:center edge:[self _destinationEdgeForReleasePointInCurrentState:view.center]];
+    [view snapViewCenterToPoint:center edge:[self _destinationEdgeForReleasePointInCurrentState:view.center]];
 }
 
 #pragma mark - View Controller Handling

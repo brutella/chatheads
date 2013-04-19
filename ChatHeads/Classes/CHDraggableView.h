@@ -13,7 +13,7 @@
 
 @property (nonatomic, assign) id<CHDraggableViewDelegate> delegate;
 
-- (void)snapToCenter:(CGPoint)point edge:(CGRectEdge)edge;
+- (void)snapViewCenterToPoint:(CGPoint)point edge:(CGRectEdge)edge;
 
 @end
 
