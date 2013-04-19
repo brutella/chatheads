@@ -32,19 +32,19 @@ I've tried to implement all animations similar to the Facebook.app and make them
 When a bubble is touched, it's scaled down to give a nice feeling of depth. 
 When the bubble is released or dragged it gets scaled up again with a nice bounce animation.
 
-[Video](https://dl.dropboxusercontent.com/u/2187517/Uploads/ChatHeads/video_touch.mov)
+[Video](https://dl.dropboxusercontent.com/u/2187517/Uploads/ChatHeads/touch.m4v)
 
 #### Dragging and Releasing
 
 The bubbles can be dragged anywhere on the screen and doesn't block the underlyng UI. After releasing the bubble, it gets moved to the snap position. At the end of the animation, there is a little bounce effect. The intensity of the bounce effect depends on the distance between the release and destination location. 
 
-[Video](https://dl.dropboxusercontent.com/u/2187517/Uploads/ChatHeads/video_move.mov)
+[Video](https://dl.dropboxusercontent.com/u/2187517/Uploads/ChatHeads/move.m4v)
 
 #### Pressing
 
 If a bubble is pressed (touched but not moved), it gets moved to the top of the screen and a new view appears below it. Facebook presents the conversation history in this view. It's nice that popup view also animates with the same bounce effect as all other animations.
 
-[Video](https://dl.dropboxusercontent.com/u/2187517/Uploads/ChatHeads/video_conversation_state.mov)
+[Video](https://dl.dropboxusercontent.com/u/2187517/Uploads/ChatHeads/states.m4v)
 
 ### Implementation
 
