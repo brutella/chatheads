@@ -23,6 +23,8 @@
 		667E35CF17215D52000B8445 /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 667E35CE17215D52000B8445 /* avatar.png */; };
 		667E35D217215E6B000B8445 /* CHAvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 667E35D117215E6B000B8445 /* CHAvatarView.m */; };
 		667E35D517215EDF000B8445 /* CHDraggableView+Avatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 667E35D417215EDF000B8445 /* CHDraggableView+Avatar.m */; };
+		66EEA08B1724625700DCBB06 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66EEA08A1724625700DCBB06 /* QuartzCore.framework */; };
+		66EEA08E172479D100DCBB06 /* CHBounceAnimationCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EEA08D172479D100DCBB06 /* CHBounceAnimationCurve.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +53,9 @@
 		667E35D117215E6B000B8445 /* CHAvatarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHAvatarView.m; sourceTree = "<group>"; };
 		667E35D317215EDF000B8445 /* CHDraggableView+Avatar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CHDraggableView+Avatar.h"; sourceTree = "<group>"; };
 		667E35D417215EDF000B8445 /* CHDraggableView+Avatar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CHDraggableView+Avatar.m"; sourceTree = "<group>"; };
+		66EEA08A1724625700DCBB06 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		66EEA08C172479D100DCBB06 /* CHBounceAnimationCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHBounceAnimationCurve.h; sourceTree = "<group>"; };
+		66EEA08D172479D100DCBB06 /* CHBounceAnimationCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHBounceAnimationCurve.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66EEA08B1724625700DCBB06 /* QuartzCore.framework in Frameworks */,
 				667E359A17214105000B8445 /* UIKit.framework in Frameworks */,
 				667E359C17214105000B8445 /* Foundation.framework in Frameworks */,
 				667E359E17214105000B8445 /* CoreGraphics.framework in Frameworks */,
@@ -70,6 +76,7 @@
 		667E358D17214104000B8445 = {
 			isa = PBXGroup;
 			children = (
+				66EEA08A1724625700DCBB06 /* QuartzCore.framework */,
 				667E359F17214105000B8445 /* ChatHeads */,
 				667E359817214104000B8445 /* Frameworks */,
 				667E359717214104000B8445 /* Products */,
@@ -134,6 +141,8 @@
 				667E35D417215EDF000B8445 /* CHDraggableView+Avatar.m */,
 				667E35C917214C0C000B8445 /* CHDraggingCoordinator.h */,
 				667E35CA17214C0C000B8445 /* CHDraggingCoordinator.m */,
+				66EEA08C172479D100DCBB06 /* CHBounceAnimationCurve.h */,
+				66EEA08D172479D100DCBB06 /* CHBounceAnimationCurve.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -228,6 +237,7 @@
 				667E35CB17214C0C000B8445 /* CHDraggingCoordinator.m in Sources */,
 				667E35D217215E6B000B8445 /* CHAvatarView.m in Sources */,
 				667E35D517215EDF000B8445 /* CHDraggableView+Avatar.m in Sources */,
+				66EEA08E172479D100DCBB06 /* CHBounceAnimationCurve.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +360,7 @@
 				667E35BB17214105000B8445 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

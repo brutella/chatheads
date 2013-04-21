@@ -10,6 +10,8 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import "CHBounceAnimationCurve.h"
+
 @interface CHDraggableView ()
 
 @property (nonatomic, assign) BOOL moved;
@@ -86,36 +88,6 @@
 #pragma mark - Animations
 #define CGPointIntegral(point) CGPointMake((int)point.x, (int)point.y)
 
-#define SNAP_ANIMATION_BOUNCE 0.04f
-- (void)_snapViewCenterToPoint:(CGPoint)point edge:(CGRectEdge)edge
-{
-    CGPoint currentCenter = self.center;
-    
-    // How much should be bounced based on the moving distance?
-    CGFloat movingDistance = [self _distanceFromPoint:currentCenter toPoint:point];
-    CGFloat angle = [self _angleFromPoint:currentCenter toPoint:point];
-    
-    CGFloat bounceDistance = movingDistance * SNAP_ANIMATION_BOUNCE;
-    CGFloat deltaX = sinf(angle) * bounceDistance;
-    CGFloat deltaY = cosf(angle) * bounceDistance;
-    
-    CGPoint step1 = point;
-    step1.x += deltaX;
-    step1.y += deltaY;
-    
-    CGPoint step2 = point;
-    
-    [UIView animateWithDuration:0.28f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.center = CGPointIntegral(step1);
-    } completion:^(BOOL finished){
-        if (finished) {
-            [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.center = CGPointIntegral(step2);
-            } completion:^(BOOL finished){}];
-        }
-    }];
-}
-
 - (CGFloat)_distanceFromPoint:(CGPoint)point1 toPoint:(CGPoint)point2
 {
     return hypotf(point1.x - point2.x, point1.y - point2.y);
@@ -140,39 +112,71 @@
 }
 
 - (void)_beginHoldAnimation
-{
-    CGAffineTransform transform_step1 = CGAffineTransformMakeScale(0.9f, 0.9f);
-    CGAffineTransform transform_step2 = CGAffineTransformMakeScale(0.95f, 0.95f);
-    [self _beginScaleAnimationWithTransformStep1:transform_step1 durationStep1:0.1f transformStep2:transform_step2 durationStep2:0.1f];
+{   
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.duration = 0.13f;
+
+    CGFloat toValue = 0.95f;
+    animation.values = [self _valuesForAnimationFromScaleValue:1 toScaleValue:toValue duration:animation.duration];
+    self.layer.transform = CATransform3DMakeScale(toValue, toValue, 1);
+    [self.layer addAnimation:animation forKey:nil];
 }
 
 - (void)_beginReleaseAnimation
 {
-    CGAffineTransform transform_step1 = CGAffineTransformMakeScale(1.05f, 1.05f);
-    CGAffineTransform transform_step2 = CGAffineTransformMakeScale(1, 1);
-    [self _beginScaleAnimationWithTransformStep1:transform_step1 durationStep1:0.15f transformStep2:transform_step2 durationStep2:0.1f];
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.duration = 0.13f;
+    
+    CGFloat toValue = 1.05;
+    animation.values = [self _valuesForAnimationFromScaleValue:1 toScaleValue:toValue duration:animation.duration];
+    self.layer.transform = CATransform3DMakeScale(toValue, toValue, 1);
+    [self.layer addAnimation:animation forKey:nil];
 }
 
-- (void)_beginScaleAnimationWithTransformStep1:(CGAffineTransform)transformStep1 durationStep1:(CGFloat)durationStep1 transformStep2:(CGAffineTransform)transformStep2 durationStep2:(CGFloat)durationStep2
+#define SNAP_ANIMATION_BOUNCE 0.04f
+- (void)_snapViewCenterToPoint:(CGPoint)point edge:(CGRectEdge)edge
 {
-    [UIView animateWithDuration:durationStep1 delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.layer.affineTransform = transformStep1;
-    }completion:^(BOOL finished){
-        if (finished) {
-            [UIView animateWithDuration:durationStep2 animations:^{
-                self.layer.affineTransform = transformStep2;
-            }];
-        }
-    }];
+    CGPoint currentCenter = self.center;
+    
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.duration = 1;
+    animation.values = [self _valuesForAnimationFromPoint:currentCenter toPoint:point duration:animation.duration];
+    self.layer.position = point;
+    [self.layer addAnimation:animation forKey:nil];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (NSArray *)_valuesForAnimationFromScaleValue:(CGFloat)fromValue toScaleValue:(CGFloat)toValue duration:(CGFloat)duration
 {
-    // Drawing code
+    CHBounceAnimationCurve *curve = [CHBounceAnimationCurve bounceAnimationCurveFromValue:fromValue toValue:toValue numberOfBounces:2];
+    NSArray *interpolatedValues = [curve interpolatedValuesForDuration:duration];
+    
+    NSMutableArray *values = [NSMutableArray arrayWithCapacity:[interpolatedValues count]];
+    for (int i = 0; i < [interpolatedValues count]; i++) {
+        CGFloat value = [[interpolatedValues objectAtIndex:i] floatValue];
+        [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(value, value, 1)]];
+    }
+    
+    return values;
 }
-*/
+
+- (NSArray *)_valuesForAnimationFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint duration:(CGFloat)duration
+{
+    CHBounceAnimationCurve *curveX = [CHBounceAnimationCurve bounceAnimationCurveFromValue:fromPoint.x toValue:toPoint.x numberOfBounces:2];
+    CHBounceAnimationCurve *curveY = [CHBounceAnimationCurve bounceAnimationCurveFromValue:fromPoint.y toValue:toPoint.y numberOfBounces:2];
+    NSArray *xValues = [curveX interpolatedValuesForDuration:duration];
+    NSArray *yValues = [curveY interpolatedValuesForDuration:duration];
+    
+    NSMutableArray *values = [NSMutableArray arrayWithCapacity:[xValues count]];
+    for (int i = 0; i < [xValues count]; i++) {
+        CGFloat x = [[xValues objectAtIndex:i] floatValue];
+        CGFloat y = [[yValues objectAtIndex:i] floatValue];
+        [values addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
+    }
+    
+    return values;
+}
 
 @end

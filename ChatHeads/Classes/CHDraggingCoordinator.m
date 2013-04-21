@@ -197,14 +197,19 @@ typedef enum {
     _backgroundView.alpha = 0.0f;
     [self.window insertSubview:_backgroundView belowSubview:_presentedNavigationController.view];
     
-    [UIView animateWithDuration:0.3f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        _presentedNavigationController.view.layer.affineTransform = transformStep1;
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.duration = 0.3f;
+    
+    CGFloat toValue = 1.05;
+//    animation.values = [self _valuesForAnimationFromScaleValue:1 toScaleValue:toValue duration:animation.duration];
+    _presentedNavigationController.view.layer.transform = CATransform3DMakeScale(toValue, toValue, 1);
+    [_presentedNavigationController.view.layer addAnimation:animation forKey:nil];
+    
+    [UIView animateWithDuration:animation.duration delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _backgroundView.alpha = 1.0f;
     }completion:^(BOOL finished){
         if (finished) {
-            [UIView animateWithDuration:0.3f animations:^{
-                _presentedNavigationController.view.layer.affineTransform = transformStep2;
-            }];
         }
     }];
 }
