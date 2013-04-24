@@ -74,11 +74,21 @@ typedef enum {
     CGRectEdge destinationEdge = [self _destinationEdgeForReleasePointInCurrentState:releasePoint];
     CGFloat destinationX;
     CGFloat destinationY = MAX(releasePoint.y, CGRectGetMinY(dropArea) + CGRectGetMidY(_draggableViewBounds));
-    if (destinationEdge == CGRectMinXEdge) {
+
+    if (self.snappingEdge == CHSnappingEdgeBoth){   //ChatHead will snap to both edges
+        if (destinationEdge == CGRectMinXEdge) {
+            destinationX = CGRectGetMinX(dropArea) + midXDragView;
+        } else {
+            destinationX = CGRectGetMaxX(dropArea) - midXDragView;
+        }
+        
+    }else if(self.snappingEdge == CHSnappingEdgeLeft){  //ChatHead will snap only to left edge
         destinationX = CGRectGetMinX(dropArea) + midXDragView;
-    } else {
+        
+    }else{  //ChatHead will snap only to right edge
         destinationX = CGRectGetMaxX(dropArea) - midXDragView;
     }
+
     return CGPointMake(destinationX, destinationY);
 }
 
