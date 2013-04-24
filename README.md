@@ -5,6 +5,10 @@ ChatHeads is a new feature in [Facebook.app 6.0](http://www.theverge.com/2013/4/
 This project is an attempt to re-implement this feature and to figure out how the animations are done. 
 I don't support this project in a way to completely implement all features of ChatHeads. It should only illustrate how parts of ChatHeads are done.
 
+## Make it Build
+
+Don't forget to run `git submodule update --init` before building the project. I've added [SKBounceAnimation][SKBounceAnimation-link] and [CAAnimationBlocks](https://github.com/xissburg/CAAnimationBlocks) in the last update.
+
 ## The Design
 
 ChatHeads in Facebook.app are little bubbles which show the Friends avatar. They can be dragged around and will snap to the left or right screen edge if they are released. If a ChatHead bubble is pressed, the conversation view appears and the bubbles are arranged at the top of the screen.
@@ -52,15 +56,28 @@ If a bubble is pressed (touched but not moved), it gets moved to the top of the 
 The main two classes are `CHDraggableView` and `CHDraggingCoordinator`. `CHDraggableView` is (as the name already tells) a view which can be dragged around and can contain an arbitrary view. In this project the `CHAvatarView` represents a ChatHead bubble is added as a subview to the `CHDraggableView`. The `CHDraggingCoordinator` is a delegate of the `CHDraggableView` is coordinates where the view should be snapped it. The animation of the bubble is done in the `CHDraggableView`.
 
 #### Animations
-The bouncing effect is calculated dynamically based on the distance between the release and destination location.
+<del>The bouncing effect is calculated dynamically based on the distance between the release and destination location.</del>
 
-To get the intensity of the bounce, I calculated the `distance` and `angle` between the start and end point. The `bounceDistance` is 4% of the `distance`. 
+<del>To get the intensity of the bounce, I calculated the `distance` and `angle` between the start and end point. The `bounceDistance` is 4% of the `distance`.</del>
 
-Based on the angle I calculated `deltaX = sin(angle) * bounceDistance` and `deltaY = cos(angle) * bounceDistance`.
+<del>Based on the angle I calculated `deltaX = sin(angle) * bounceDistance` and `deltaY = cos(angle) * bounceDistance`.</del>
 
 ![](Resources/math.pdf)
 
-The bubble is first animated to the bounce location and then to the end point.
+<del>The bubble is first animated to the bounce location and then to the end point.</del>
+
+**Update 2013-04-24**
+The bounce animation is now based on a spring mass damper system. Thanks for the tip [Joe Ricioppo](https://twitter.com/joericioppo/status/325325036011520000).
+
+There is an articel from [Soroush Khanlou](http://khanlou.com/2012/01/dampers-and-their-role-in-physical-models/) where he explains the math of a spring mass damper and builds the foundation for another [post](http://khanlou.com/2012/01/cakeyframeanimation-make-it-bounce/) where he implemented a bounce animation in Objective-C called [SKBounceAnimation][SKBounceAnimation-link]. This library calculates values for a bounce animation based on the following equation.
+
+![](Resources/equation.gif)
+
+With this equation and correct values from omega (0.06) and alpha (0.04), a simple 1d animation from `x = 300` to `x = 100` could look like this.
+
+![](Resources/bounce_animation.png)
+
+That's much better way of doing bounce animations.
 
 #### Avatar Drawing
 
@@ -68,3 +85,4 @@ The bubble is first animated to the bounce location and then to the end point.
 
 The drawing of the bubble is done in `CHAvatarView` by using an image and adding a black drop shadown and a white inner shadow.
 
+[SKBounceAnimation-link]: https://github.com/khanlou/SKBounceAnimation
