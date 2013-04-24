@@ -1,0 +1,6 @@
+[submodule "ChatHeads/Externals/SKBounceAnimation"]
+	path = ChatHeads/Externals/SKBounceAnimation
+	url = git://github.com/khanlou/SKBounceAnimation.git
+[submodule "ChatHeads/Externals/CAAnimationBlocks"]
+	path = ChatHeads/Externals/CAAnimationBlocks
+	url = git://github.com/xissburg/CAAnimationBlocks.git

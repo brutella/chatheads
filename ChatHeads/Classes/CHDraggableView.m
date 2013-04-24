@@ -7,10 +7,9 @@
 //
 
 #import "CHDraggableView.h"
-
 #import <QuartzCore/QuartzCore.h>
 
-#import "CHBounceAnimationCurve.h"
+#import "SKBounceAnimation.h"
 
 @interface CHDraggableView ()
 
@@ -112,71 +111,40 @@
 }
 
 - (void)_beginHoldAnimation
-{   
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+{
+    SKBounceAnimation *animation = [SKBounceAnimation animationWithKeyPath:@"transform"];
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    animation.duration = 0.13f;
-
-    CGFloat toValue = 0.95f;
-    animation.values = [self _valuesForAnimationFromScaleValue:1 toScaleValue:toValue duration:animation.duration];
-    self.layer.transform = CATransform3DMakeScale(toValue, toValue, 1);
+    animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1, 1, 1)];
+    animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.95f, 0.95f, 1)];
+    animation.duration = 0.2f;
+    
+    self.layer.transform = [animation.toValue CATransform3DValue];
     [self.layer addAnimation:animation forKey:nil];
 }
 
 - (void)_beginReleaseAnimation
 {
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    SKBounceAnimation *animation = [SKBounceAnimation animationWithKeyPath:@"transform"];
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    animation.duration = 0.13f;
+    animation.fromValue = [NSValue valueWithCATransform3D:self.layer.transform];
+    animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1, 1, 1)];
+    animation.duration = 0.2f;
     
-    CGFloat toValue = 1.05;
-    animation.values = [self _valuesForAnimationFromScaleValue:1 toScaleValue:toValue duration:animation.duration];
-    self.layer.transform = CATransform3DMakeScale(toValue, toValue, 1);
+    self.layer.transform = [animation.toValue CATransform3DValue];
     [self.layer addAnimation:animation forKey:nil];
 }
 
-#define SNAP_ANIMATION_BOUNCE 0.04f
 - (void)_snapViewCenterToPoint:(CGPoint)point edge:(CGRectEdge)edge
 {
     CGPoint currentCenter = self.center;
     
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    SKBounceAnimation *animation = [SKBounceAnimation animationWithKeyPath:@"position"];
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    animation.duration = 1;
-    animation.values = [self _valuesForAnimationFromPoint:currentCenter toPoint:point duration:animation.duration];
+    animation.fromValue = [NSValue valueWithCGPoint:currentCenter];
+    animation.toValue = [NSValue valueWithCGPoint:point];
+    animation.duration = 1.2f;
     self.layer.position = point;
     [self.layer addAnimation:animation forKey:nil];
-}
-
-- (NSArray *)_valuesForAnimationFromScaleValue:(CGFloat)fromValue toScaleValue:(CGFloat)toValue duration:(CGFloat)duration
-{
-    CHBounceAnimationCurve *curve = [CHBounceAnimationCurve bounceAnimationCurveFromValue:fromValue toValue:toValue numberOfBounces:2];
-    NSArray *interpolatedValues = [curve interpolatedValuesForDuration:duration];
-    
-    NSMutableArray *values = [NSMutableArray arrayWithCapacity:[interpolatedValues count]];
-    for (int i = 0; i < [interpolatedValues count]; i++) {
-        CGFloat value = [[interpolatedValues objectAtIndex:i] floatValue];
-        [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(value, value, 1)]];
-    }
-    
-    return values;
-}
-
-- (NSArray *)_valuesForAnimationFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint duration:(CGFloat)duration
-{
-    CHBounceAnimationCurve *curveX = [CHBounceAnimationCurve bounceAnimationCurveFromValue:fromPoint.x toValue:toPoint.x numberOfBounces:2];
-    CHBounceAnimationCurve *curveY = [CHBounceAnimationCurve bounceAnimationCurveFromValue:fromPoint.y toValue:toPoint.y numberOfBounces:2];
-    NSArray *xValues = [curveX interpolatedValuesForDuration:duration];
-    NSArray *yValues = [curveY interpolatedValuesForDuration:duration];
-    
-    NSMutableArray *values = [NSMutableArray arrayWithCapacity:[xValues count]];
-    for (int i = 0; i < [xValues count]; i++) {
-        CGFloat x = [[xValues objectAtIndex:i] floatValue];
-        CGFloat y = [[yValues objectAtIndex:i] floatValue];
-        [values addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
-    }
-    
-    return values;
 }
 
 @end
