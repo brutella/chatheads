@@ -10,9 +10,16 @@
 
 #import "CHDraggableView.h"
 
+typedef enum {
+    CHSnappingEdgeBoth,
+    CHSnappingEdgeRight,
+    CHSnappingEdgeLeft
+} CHSnappingEdge;
+
 @protocol CHDraggingCoordinatorDelegate;
 @interface CHDraggingCoordinator : NSObject <CHDraggableViewDelegate>
 
+@property (nonatomic) CHSnappingEdge snappingEdge;
 @property (nonatomic, weak) id<CHDraggingCoordinatorDelegate> delegate;
 
 - (id)initWithWindow:(UIWindow *)window draggableViewBounds:(CGRect)bounds;
