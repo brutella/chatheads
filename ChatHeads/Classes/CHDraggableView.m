@@ -147,4 +147,12 @@
     [self.layer addAnimation:animation forKey:nil];
 }
 
+#pragma mark - Layout
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [_delegate draggableViewNeedsAlignment:self];
+}
+
 @end
