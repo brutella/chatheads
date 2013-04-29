@@ -221,14 +221,15 @@ typedef enum {
 
 - (void)_hidePresentedNavigationControllerCompletion:(void(^)())completionBlock
 {
+    UIView *viewToDisplay = _backgroundView;
     [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _presentedNavigationController.view.transform = CGAffineTransformMakeScale(0, 0);
         _presentedNavigationController.view.alpha = 0.0f;
         _backgroundView.alpha = 0.0f;
     } completion:^(BOOL finished){
         if (finished) {
-            [_backgroundView removeFromSuperview];
-            _backgroundView = nil;
+            [viewToDisplay removeFromSuperview];
+            if (viewToDisplay == _backgroundView) _backgroundView = nil;
             completionBlock();
         }
     }];
