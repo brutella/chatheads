@@ -83,6 +83,6 @@ That's much better way of doing bounce animations.
 
 ![](Resources/avatar.png)
 
-The drawing of the bubble is done in `CHAvatarView` by using an image and adding a black drop shadown and a white inner shadow.
+The drawing of the bubble is done in `CHAvatarView` by using an image and adding a black drop shadow and a white inner shadow.
 
 [SKBounceAnimation-link]: https://github.com/khanlou/SKBounceAnimation
