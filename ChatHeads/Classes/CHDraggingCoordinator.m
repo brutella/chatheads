@@ -147,7 +147,7 @@ typedef enum {
     }
 }
 
-#pragma makr - Alignment
+#pragma mark - Alignment
 
 - (void)draggableViewNeedsAlignment:(CHDraggableView *)view
 {
