@@ -229,7 +229,9 @@ typedef enum {
     } completion:^(BOOL finished){
         if (finished) {
             [viewToDisplay removeFromSuperview];
-            if (viewToDisplay == _backgroundView) _backgroundView = nil;
+            if (viewToDisplay == _backgroundView) {
+                _backgroundView = nil;
+            }
             completionBlock();
         }
     }];
