@@ -72,8 +72,18 @@ typedef enum {
     
     CGFloat midXDragView = CGRectGetMidX(_draggableViewBounds);
     CGRectEdge destinationEdge = [self _destinationEdgeForReleasePointInCurrentState:releasePoint];
+    CGFloat destinationY;
     CGFloat destinationX;
-    CGFloat destinationY = MAX(releasePoint.y, CGRectGetMinY(dropArea) + CGRectGetMidY(_draggableViewBounds));
+ 
+    CGFloat topYConstraint = CGRectGetMinY(dropArea) + CGRectGetMidY(_draggableViewBounds);
+    CGFloat bottomYConstraint = CGRectGetMaxY(dropArea) - CGRectGetMidY(_draggableViewBounds);
+    if (releasePoint.y < topYConstraint) { // Align ChatHead vertically
+        destinationY = topYConstraint;
+    }else if (releasePoint.y > bottomYConstraint) {
+        destinationY = bottomYConstraint;
+    }else {
+        destinationY = releasePoint.y;
+    }
 
     if (self.snappingEdge == CHSnappingEdgeBoth){   //ChatHead will snap to both edges
         if (destinationEdge == CGRectMinXEdge) {
@@ -135,6 +145,14 @@ typedef enum {
         }
         [self _dismissPresentedNavigationController];
     }
+}
+
+#pragma mark - Alignment
+
+- (void)draggableViewNeedsAlignment:(CHDraggableView *)view
+{
+    NSLog(@"Align view");
+    [self _animateViewToEdges:view];
 }
 
 #pragma mark Dragging Helper
