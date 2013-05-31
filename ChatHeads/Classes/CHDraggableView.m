@@ -68,6 +68,18 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [self endUpTouch];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    // When user for example accidentally drag notifications bar
+    // with ChatHead we need to cancel touch
+    [self endUpTouch];
+}
+
+- (void)endUpTouch
+{
     if (_scaledDown) {
         [self _beginReleaseAnimation];
     }
@@ -78,10 +90,6 @@
     }
     
     _moved = NO;
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
 }
 
 #pragma mark - Animations
