@@ -202,8 +202,8 @@ typedef enum {
     _presentedNavigationController.view.frame = [self _navigationControllerFrame];
     _presentedNavigationController.view.transform = CGAffineTransformMakeScale(0, 0);
     
-    [self.window insertSubview:_presentedNavigationController.view belowSubview:draggableView];
-    [self _unhidePresentedNavigationControllerCompletion:^{}];
+    [self.window insertSubview:_presentedNavigationController.view aboveSubview:draggableView];
+    [self _unhidePresentedNavigationControllerCompletion:^{} withDraggableView:draggableView];
 }
 
 - (UINavigationController*) _createNavigationController:(UIViewController*)rootViewController {
@@ -219,7 +219,7 @@ typedef enum {
     _presentedNavigationController = nil;
 }
 
-- (void)_unhidePresentedNavigationControllerCompletion:(void(^)())completionBlock
+- (void)_unhidePresentedNavigationControllerCompletion:(void(^)())completionBlock withDraggableView:(CHDraggableView *)draggableView
 {
     CGAffineTransform transformStep1 = CGAffineTransformMakeScale(1.1f, 1.1f);
     CGAffineTransform transformStep2 = CGAffineTransformMakeScale(1, 1);
@@ -227,7 +227,7 @@ typedef enum {
     _backgroundView = [[UIView alloc] initWithFrame:[self.window bounds]];
     _backgroundView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.5f];
     _backgroundView.alpha = 0.0f;
-    [self.window insertSubview:_backgroundView belowSubview:_presentedNavigationController.view];
+    [self.window insertSubview:_backgroundView belowSubview:draggableView];
     
     [UIView animateWithDuration:0.3f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _presentedNavigationController.view.layer.affineTransform = transformStep1;
