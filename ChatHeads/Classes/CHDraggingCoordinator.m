@@ -195,7 +195,7 @@ typedef enum {
 {
     UIViewController *viewController = [_delegate draggingCoordinator:self viewControllerForDraggableView:draggableView];
     
-    _presentedNavigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    _presentedNavigationController = [self _createNavigationController:viewController];
     _presentedNavigationController.view.layer.cornerRadius = 3;
     _presentedNavigationController.view.layer.masksToBounds = YES;
     _presentedNavigationController.view.layer.anchorPoint = CGPointMake(0.5f, 0);
@@ -204,6 +204,10 @@ typedef enum {
     
     [self.window insertSubview:_presentedNavigationController.view belowSubview:draggableView];
     [self _unhidePresentedNavigationControllerCompletion:^{}];
+}
+
+- (UINavigationController*) _createNavigationController:(UIViewController*)rootViewController {
+    return [[UINavigationController alloc] initWithRootViewController:rootViewController];
 }
 
 - (void)_dismissPresentedNavigationController
