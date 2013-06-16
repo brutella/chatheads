@@ -60,7 +60,12 @@ typedef enum {
 - (CGRectEdge)_destinationEdgeForReleasePointInCurrentState:(CGPoint)releasePoint
 {
     if (_state == CHInteractionStateConversation) {
-        return CGRectMinYEdge;
+        if (_releaseAction == CHSnapBack) {
+            return CGRectMinYEdge;
+        }
+        else if (_releaseAction == CHHidePresentedViewController) {
+            return releasePoint.x < CGRectGetMidX([self _dropArea]) ? CGRectMinXEdge : CGRectMaxXEdge;
+        }
     } else if(_state == CHInteractionStateNormal) {
         return releasePoint.x < CGRectGetMidX([self _dropArea]) ? CGRectMinXEdge : CGRectMaxXEdge;
     }
@@ -126,6 +131,7 @@ typedef enum {
         [self _animateViewToEdges:view];
     } else if(_state == CHInteractionStateConversation) {
         if (self.releaseAction == CHHidePresentedViewController) {
+            _state = CHInteractionStateNormal;
             [self _animateViewToEdges:view];
         } else {
             [self _animateViewToConversationArea:view];
