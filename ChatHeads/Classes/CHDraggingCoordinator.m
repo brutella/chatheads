@@ -21,6 +21,7 @@ typedef enum {
 @property (nonatomic, strong) NSMutableDictionary *edgePointDictionary;;
 @property (nonatomic, assign) CGRect draggableViewBounds;
 @property (nonatomic, assign) CHInteractionState state;
+
 @property (nonatomic, strong) UINavigationController *presentedNavigationController;
 @property (nonatomic, strong) UIView *backgroundView;
 
@@ -36,6 +37,7 @@ typedef enum {
         _draggableViewBounds = bounds;
         _state = CHInteractionStateNormal;
         _edgePointDictionary = [NSMutableDictionary dictionary];
+        _releaseAction = CHSnapBack;
     }
     return self;
 }
@@ -123,8 +125,12 @@ typedef enum {
     if (_state == CHInteractionStateNormal) {
         [self _animateViewToEdges:view];
     } else if(_state == CHInteractionStateConversation) {
-        [self _animateViewToConversationArea:view];
-        [self _presentViewControllerForDraggableView:view];
+        if (self.releaseAction == CHHidePresentedViewController) {
+            [self _animateViewToEdges:view];
+        } else {
+            [self _animateViewToConversationArea:view];
+            [self _presentViewControllerForDraggableView:view];
+        }
     }
 }
 
