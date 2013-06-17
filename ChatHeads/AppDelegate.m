@@ -35,6 +35,7 @@
     draggableView.delegate = _draggingCoordinator;
     
     [self.window addSubview:draggableView];
+    [_draggingCoordinator draggableViewReleased:draggableView];
     
     return YES;
 }
