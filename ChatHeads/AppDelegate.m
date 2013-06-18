@@ -31,9 +31,11 @@
     _draggingCoordinator = [[CHDraggingCoordinator alloc] initWithWindow:self.window draggableViewBounds:draggableView.bounds];
     _draggingCoordinator.delegate = self;
     _draggingCoordinator.snappingEdge = CHSnappingEdgeBoth;
+    _draggingCoordinator.releaseAction = CHHidePresentedViewController;
     draggableView.delegate = _draggingCoordinator;
     
     [self.window addSubview:draggableView];
+    [_draggingCoordinator draggableViewReleased:draggableView];
     
     return YES;
 }

@@ -21,6 +21,7 @@ typedef enum {
 @property (nonatomic, strong) NSMutableDictionary *edgePointDictionary;;
 @property (nonatomic, assign) CGRect draggableViewBounds;
 @property (nonatomic, assign) CHInteractionState state;
+
 @property (nonatomic, strong) UINavigationController *presentedNavigationController;
 @property (nonatomic, strong) UIView *backgroundView;
 
@@ -36,6 +37,8 @@ typedef enum {
         _draggableViewBounds = bounds;
         _state = CHInteractionStateNormal;
         _edgePointDictionary = [NSMutableDictionary dictionary];
+        _releaseAction = CHSnapBack;
+        _tapAction = CHGotoConversation;
     }
     return self;
 }
@@ -58,7 +61,12 @@ typedef enum {
 - (CGRectEdge)_destinationEdgeForReleasePointInCurrentState:(CGPoint)releasePoint
 {
     if (_state == CHInteractionStateConversation) {
-        return CGRectMinYEdge;
+        if (_releaseAction == CHSnapBack) {
+            return CGRectMinYEdge;
+        }
+        else if (_releaseAction == CHHidePresentedViewController) {
+            return releasePoint.x < CGRectGetMidX([self _dropArea]) ? CGRectMinXEdge : CGRectMaxXEdge;
+        }
     } else if(_state == CHInteractionStateNormal) {
         return releasePoint.x < CGRectGetMidX([self _dropArea]) ? CGRectMinXEdge : CGRectMaxXEdge;
     }
@@ -123,27 +131,39 @@ typedef enum {
     if (_state == CHInteractionStateNormal) {
         [self _animateViewToEdges:view];
     } else if(_state == CHInteractionStateConversation) {
-        [self _animateViewToConversationArea:view];
-        [self _presentViewControllerForDraggableView:view];
+        if (self.releaseAction == CHHidePresentedViewController) {
+            _state = CHInteractionStateNormal;
+            [self _animateViewToEdges:view];
+        } else {
+            [self _animateViewToConversationArea:view];
+            [self _presentViewControllerForDraggableView:view];
+        }
     }
 }
 
 - (void)draggableViewTouched:(CHDraggableView *)view
 {
-    if (_state == CHInteractionStateNormal) {
-        _state = CHInteractionStateConversation;
-        [self _animateViewToConversationArea:view];
-        
-        [self _presentViewControllerForDraggableView:view];
-    } else if(_state == CHInteractionStateConversation) {
-        _state = CHInteractionStateNormal;
-        NSValue *knownEdgePoint = [_edgePointDictionary objectForKey:@(view.tag)];
-        if (knownEdgePoint) {
-            [self _animateView:view toEdgePoint:[knownEdgePoint CGPointValue]];
-        } else {
-            [self _animateViewToEdges:view];
+    if (_tapAction == CHInformDelegate) {
+        if ([self.delegate respondsToSelector:@selector(draggableViewTapped:)]) {
+            [self.delegate draggableViewTapped:view];
         }
-        [self _dismissPresentedNavigationController];
+    }
+    else {
+        if (_state == CHInteractionStateNormal) {
+            _state = CHInteractionStateConversation;
+            [self _animateViewToConversationArea:view];
+            
+            [self _presentViewControllerForDraggableView:view];
+        } else if(_state == CHInteractionStateConversation) {
+            _state = CHInteractionStateNormal;
+            NSValue *knownEdgePoint = [_edgePointDictionary objectForKey:@(view.tag)];
+            if (knownEdgePoint) {
+                [self _animateView:view toEdgePoint:[knownEdgePoint CGPointValue]];
+            } else {
+                [self _animateViewToEdges:view];
+            }
+            [self _dismissPresentedNavigationController];
+        }
     }
 }
 
@@ -195,15 +215,24 @@ typedef enum {
 {
     UIViewController *viewController = [_delegate draggingCoordinator:self viewControllerForDraggableView:draggableView];
     
-    _presentedNavigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    _presentedNavigationController = [self _createNavigationController:viewController];
     _presentedNavigationController.view.layer.cornerRadius = 3;
     _presentedNavigationController.view.layer.masksToBounds = YES;
     _presentedNavigationController.view.layer.anchorPoint = CGPointMake(0.5f, 0);
     _presentedNavigationController.view.frame = [self _navigationControllerFrame];
     _presentedNavigationController.view.transform = CGAffineTransformMakeScale(0, 0);
     
-    [self.window insertSubview:_presentedNavigationController.view belowSubview:draggableView];
-    [self _unhidePresentedNavigationControllerCompletion:^{}];
+    [self.window insertSubview:_presentedNavigationController.view aboveSubview:draggableView];
+    [self _unhidePresentedNavigationControllerCompletion:^{} withDraggableView:draggableView];
+}
+
+- (UINavigationController*) _createNavigationController:(UIViewController*)rootViewController {
+    if ([self.delegate respondsToSelector:@selector(customNavigationControllerForConversation)]) {
+        UINavigationController* navController = [self.delegate customNavigationControllerForConversation];
+        [navController setViewControllers:@[rootViewController]];
+        return navController;
+    }
+    return [[UINavigationController alloc] initWithRootViewController:rootViewController];
 }
 
 - (void)_dismissPresentedNavigationController
@@ -215,7 +244,7 @@ typedef enum {
     _presentedNavigationController = nil;
 }
 
-- (void)_unhidePresentedNavigationControllerCompletion:(void(^)())completionBlock
+- (void)_unhidePresentedNavigationControllerCompletion:(void(^)())completionBlock withDraggableView:(CHDraggableView *)draggableView
 {
     CGAffineTransform transformStep1 = CGAffineTransformMakeScale(1.1f, 1.1f);
     CGAffineTransform transformStep2 = CGAffineTransformMakeScale(1, 1);
@@ -223,7 +252,7 @@ typedef enum {
     _backgroundView = [[UIView alloc] initWithFrame:[self.window bounds]];
     _backgroundView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.5f];
     _backgroundView.alpha = 0.0f;
-    [self.window insertSubview:_backgroundView belowSubview:_presentedNavigationController.view];
+    [self.window insertSubview:_backgroundView belowSubview:draggableView];
     
     [UIView animateWithDuration:0.3f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _presentedNavigationController.view.layer.affineTransform = transformStep1;
