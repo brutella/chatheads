@@ -38,6 +38,7 @@ typedef enum {
         _state = CHInteractionStateNormal;
         _edgePointDictionary = [NSMutableDictionary dictionary];
         _releaseAction = CHSnapBack;
+        _tapAction = CHGotoConversation;
     }
     return self;
 }
@@ -142,20 +143,27 @@ typedef enum {
 
 - (void)draggableViewTouched:(CHDraggableView *)view
 {
-    if (_state == CHInteractionStateNormal) {
-        _state = CHInteractionStateConversation;
-        [self _animateViewToConversationArea:view];
-        
-        [self _presentViewControllerForDraggableView:view];
-    } else if(_state == CHInteractionStateConversation) {
-        _state = CHInteractionStateNormal;
-        NSValue *knownEdgePoint = [_edgePointDictionary objectForKey:@(view.tag)];
-        if (knownEdgePoint) {
-            [self _animateView:view toEdgePoint:[knownEdgePoint CGPointValue]];
-        } else {
-            [self _animateViewToEdges:view];
+    if (_tapAction == CHInformDelegate) {
+        if ([self.delegate respondsToSelector:@selector(draggableViewTapped:)]) {
+            [self.delegate draggableViewTapped:view];
         }
-        [self _dismissPresentedNavigationController];
+    }
+    else {
+        if (_state == CHInteractionStateNormal) {
+            _state = CHInteractionStateConversation;
+            [self _animateViewToConversationArea:view];
+            
+            [self _presentViewControllerForDraggableView:view];
+        } else if(_state == CHInteractionStateConversation) {
+            _state = CHInteractionStateNormal;
+            NSValue *knownEdgePoint = [_edgePointDictionary objectForKey:@(view.tag)];
+            if (knownEdgePoint) {
+                [self _animateView:view toEdgePoint:[knownEdgePoint CGPointValue]];
+            } else {
+                [self _animateViewToEdges:view];
+            }
+            [self _dismissPresentedNavigationController];
+        }
     }
 }
 
@@ -219,6 +227,11 @@ typedef enum {
 }
 
 - (UINavigationController*) _createNavigationController:(UIViewController*)rootViewController {
+    if ([self.delegate respondsToSelector:@selector(customNavigationControllerForConversation)]) {
+        UINavigationController* navController = [self.delegate customNavigationControllerForConversation];
+        [navController setViewControllers:@[rootViewController]];
+        return navController;
+    }
     return [[UINavigationController alloc] initWithRootViewController:rootViewController];
 }
 
