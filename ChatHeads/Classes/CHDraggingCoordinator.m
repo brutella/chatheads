@@ -231,6 +231,12 @@ typedef enum {
 
 #pragma mark - View Controller Handling
 
+- (void) dismissPresentedViewController
+{
+    [self _dismissPresentedNavigationController];
+}
+
+
 - (CGRect)_navigationControllerFrame
 {
     CGRect slice;
