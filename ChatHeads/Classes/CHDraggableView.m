@@ -160,6 +160,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    [_delegate initialState:self];
     [_delegate draggableViewNeedsAlignment:self];
 }
 

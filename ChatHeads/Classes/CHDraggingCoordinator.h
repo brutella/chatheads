@@ -18,8 +18,9 @@ typedef enum {
 
 typedef enum {
     CHAlignTopLeft,
-    CHAlignTopCenter,
-    CHAlignTopRight
+    CHAlignTopRight,
+    CHAlignBottomLeft,
+    CHAlignBottomRight
 } CHAlignment;
 
 @protocol CHDraggingCoordinatorDelegate;
