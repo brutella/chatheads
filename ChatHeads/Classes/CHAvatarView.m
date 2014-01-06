@@ -49,20 +49,27 @@
         CGContextBeginPath(ctx);
         CGContextAddPath(ctx, circlePath);
         CGContextClip(ctx);
-        [_image drawInRect:b];
+        if (_image) {
+            [_image drawInRect:b];
+        } else if (_fillColor) {
+            CGContextSetFillColorWithColor(ctx, _fillColor.CGColor);
+            CGContextFillRect(ctx, b);
+        }
     } CGContextRestoreGState(ctx);
     
-    CGContextSaveGState(ctx); {
-        CGContextBeginPath(ctx);
-        CGContextAddPath(ctx, circlePath);
-        CGContextClip(ctx);
-        
-        CGContextSetShadowWithColor(ctx, CGSizeMake(0, 0), 3.0f, [UIColor colorWithRed:0.994 green:0.989 blue:1.000 alpha:1.0f].CGColor);
-        
-        CGContextBeginPath(ctx);
-        CGContextAddPath(ctx, inverseCirclePath);
-        CGContextEOFillPath(ctx);
-    } CGContextRestoreGState(ctx);
+    if (_useEvenOddFill) {
+        CGContextSaveGState(ctx); {
+            CGContextBeginPath(ctx);
+            CGContextAddPath(ctx, circlePath);
+            CGContextClip(ctx);
+            
+            CGContextSetShadowWithColor(ctx, CGSizeMake(0, 0), 3.0f, [UIColor colorWithRed:0.994 green:0.989 blue:1.000 alpha:1.0f].CGColor);
+            
+            CGContextBeginPath(ctx);
+            CGContextAddPath(ctx, inverseCirclePath);
+            CGContextEOFillPath(ctx);
+        } CGContextRestoreGState(ctx);
+    }
     
     CGPathRelease(circlePath);
     CGPathRelease(inverseCirclePath);

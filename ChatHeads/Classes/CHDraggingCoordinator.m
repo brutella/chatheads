@@ -151,8 +151,57 @@ typedef enum {
 
 - (void)draggableViewNeedsAlignment:(CHDraggableView *)view
 {
-    NSLog(@"Align view");
     [self _animateViewToEdges:view];
+}
+
+- (CGPoint)getInitialBubbleAlignment
+{
+    CGRect conversationArea = [self _conversationArea];
+    
+    CGPoint alignment = CGPointMake(CGRectGetMidX(conversationArea), CGRectGetMidY(conversationArea));
+    
+    switch (self.alignment) {
+        case CHAlignTopLeft:
+            alignment = CGPointMake(CGRectGetMinX(conversationArea) + 35, CGRectGetMidY(conversationArea));
+            break;
+        case CHAlignTopRight:
+            alignment = CGPointMake(CGRectGetMaxX(conversationArea) - 35, CGRectGetMidY(conversationArea));
+            break;
+        case CHAlignBottomLeft:
+            alignment = CGPointMake(CGRectGetMinX(conversationArea) + 35, CGRectGetMaxY(_window.frame));
+            break;
+        case CHAlignBottomRight:
+            alignment = CGPointMake(CGRectGetMaxX(conversationArea) - 35, CGRectGetMaxY(_window.frame));
+            break;
+        default:
+            break;
+    }
+    return alignment;
+}
+
+- (CGPoint)getBubbleAlignment
+{
+    CGRect conversationArea = [self _conversationArea];
+    
+    CGPoint alignment = CGPointMake(CGRectGetMidX(conversationArea), CGRectGetMidY(conversationArea));
+    
+    switch (self.alignment) {
+        case CHAlignTopLeft:
+            alignment = CGPointMake(CGRectGetMinX(conversationArea) + 35, CGRectGetMidY(conversationArea));
+            break;
+        case CHAlignTopRight:
+            alignment = CGPointMake(CGRectGetMaxX(conversationArea) - 35, CGRectGetMidY(conversationArea));
+            break;
+        case CHAlignBottomLeft:
+            alignment = CGPointMake(CGRectGetMinX(conversationArea) + 35, CGRectGetMinY(_window.frame) + 55);
+            break;
+        case CHAlignBottomRight:
+            alignment = CGPointMake(CGRectGetMaxX(conversationArea) - 35, CGRectGetMinY(_window.frame) + 55);
+            break;
+        default:
+            break;
+    }
+    return alignment;
 }
 
 #pragma mark Dragging Helper
@@ -160,6 +209,12 @@ typedef enum {
 - (void)_animateViewToEdges:(CHDraggableView *)view
 {
     CGPoint destinationPoint = [self _destinationPointForReleasePoint:view.center];    
+    [self _animateView:view toEdgePoint:destinationPoint];
+}
+
+- (void)initialState:(CHDraggableView *)view
+{
+    CGPoint destinationPoint = [self _destinationPointForReleasePoint:[self getInitialBubbleAlignment]];
     [self _animateView:view toEdgePoint:destinationPoint];
 }
 
@@ -171,12 +226,16 @@ typedef enum {
 
 - (void)_animateViewToConversationArea:(CHDraggableView *)view
 {
-    CGRect conversationArea = [self _conversationArea];
-    CGPoint center = CGPointMake(CGRectGetMidX(conversationArea), CGRectGetMidY(conversationArea));
-    [view snapViewCenterToPoint:center edge:[self _destinationEdgeForReleasePointInCurrentState:view.center]];
+    [view snapViewCenterToPoint:[self getBubbleAlignment] edge:[self _destinationEdgeForReleasePointInCurrentState:view.center]];
 }
 
 #pragma mark - View Controller Handling
+
+- (void) dismissPresentedViewController
+{
+    [self _dismissPresentedNavigationController];
+}
+
 
 - (CGRect)_navigationControllerFrame
 {

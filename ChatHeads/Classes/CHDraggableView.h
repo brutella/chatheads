@@ -27,4 +27,5 @@
 
 - (void)draggableViewNeedsAlignment:(CHDraggableView *)view;
 
+- (void)initialState:(CHDraggableView *)view;
 @end

@@ -10,5 +10,7 @@
 @interface CHAvatarView : UIView
 
 @property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) UIColor *fillColor;   // used if image is nil
+@property (assign, nonatomic) BOOL useEvenOddFill;
 
 @end

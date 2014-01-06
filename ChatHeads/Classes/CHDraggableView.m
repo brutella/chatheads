@@ -121,10 +121,10 @@
 - (void)_beginHoldAnimation
 {
     SKBounceAnimation *animation = [SKBounceAnimation animationWithKeyPath:@"transform"];
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1, 1, 1)];
     animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.95f, 0.95f, 1)];
-    animation.duration = 0.2f;
+    animation.duration = 0.7f;
     
     self.layer.transform = [animation.toValue CATransform3DValue];
     [self.layer addAnimation:animation forKey:nil];
@@ -133,10 +133,10 @@
 - (void)_beginReleaseAnimation
 {
     SKBounceAnimation *animation = [SKBounceAnimation animationWithKeyPath:@"transform"];
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     animation.fromValue = [NSValue valueWithCATransform3D:self.layer.transform];
     animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1, 1, 1)];
-    animation.duration = 0.2f;
+    animation.duration = 0.7f;
     
     self.layer.transform = [animation.toValue CATransform3DValue];
     [self.layer addAnimation:animation forKey:nil];
@@ -147,10 +147,10 @@
     CGPoint currentCenter = self.center;
     
     SKBounceAnimation *animation = [SKBounceAnimation animationWithKeyPath:@"position"];
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     animation.fromValue = [NSValue valueWithCGPoint:currentCenter];
     animation.toValue = [NSValue valueWithCGPoint:point];
-    animation.duration = 1.2f;
+    animation.duration = 2.2f;
     self.layer.position = point;
     [self.layer addAnimation:animation forKey:nil];
 }
@@ -160,6 +160,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    [_delegate initialState:self];
     [_delegate draggableViewNeedsAlignment:self];
 }
 
