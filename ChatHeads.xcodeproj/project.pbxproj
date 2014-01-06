@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		664E93901725C4960088A857 /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 664E93731725C4960088A857 /* SKBounceAnimation.m */; };
-		664E93AE1725C7560088A857 /* CAAnimation+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 664E93A01725C7560088A857 /* CAAnimation+Blocks.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		664E93AE1725C7560088A857 /* CAAnimation+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 664E93A01725C7560088A857 /* CAAnimation+Blocks.m */; };
 		667E359A17214105000B8445 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 667E359917214104000B8445 /* UIKit.framework */; };
 		667E359C17214105000B8445 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 667E359B17214105000B8445 /* Foundation.framework */; };
 		667E359E17214105000B8445 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 667E359D17214105000B8445 /* CoreGraphics.framework */; };
