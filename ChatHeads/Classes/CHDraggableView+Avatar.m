@@ -29,6 +29,10 @@
     return [self _draggableViewWithImage:nil fillColor:color size:size];
 }
 
++ (id)draggableViewWithView:(UIView *)customView fillColor:(UIColor *)inColor {
+    return [self draggableViewWithView:customView fillColor:inColor size:CGSizeMake(66, 66)];
+}
+
 + (id)_draggableViewWithImage:(UIImage *)inImage fillColor:(UIColor *)inColor size:(CGSize)inSize {
     CHDraggableView *view = [[CHDraggableView alloc] initWithFrame:CGRectMake(0, 0, inSize.width, inSize.height)];
     
@@ -41,6 +45,30 @@
     }
     
     avatarView.center = CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds));
+    [view addSubview:avatarView];
+    
+    return view;
+}
+
++ (id)draggableViewWithView:(UIView *)customView fillColor:(UIColor *)inColor size:(CGSize)inSize
+{
+    CHDraggableView *view = [[CHDraggableView alloc] initWithFrame:CGRectMake(0, 0, inSize.width, inSize.height)];
+    
+    customView.frame = view.bounds;
+    customView.backgroundColor = [UIColor clearColor];
+    
+    CHAvatarView *avatarView = [[CHAvatarView alloc] initWithFrame:view.bounds];
+    avatarView.backgroundColor = [UIColor clearColor];
+    [avatarView setFillColor:inColor];
+    
+    if (inColor)
+    {
+        avatarView.useEvenOddFill = NO;
+    }
+    
+    avatarView.center = CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds));
+    
+    [avatarView addSubview:customView];
     [view addSubview:avatarView];
     
     return view;

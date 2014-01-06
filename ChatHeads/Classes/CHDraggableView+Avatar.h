@@ -16,4 +16,7 @@
 + (id)draggableViewWithFillColor:(UIColor *)color;
 + (id)draggableViewWithFillColor:(UIColor *)color size:(CGSize)size;
 
++ (id)draggableViewWithView:(UIView *)customView fillColor:(UIColor *)inColor;
++ (id)draggableViewWithView:(UIView *)customView fillColor:(UIColor *)inColor size:(CGSize)inSize;
+
 @end
