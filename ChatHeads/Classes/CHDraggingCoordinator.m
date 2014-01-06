@@ -151,7 +151,6 @@ typedef enum {
 
 - (void)draggableViewNeedsAlignment:(CHDraggableView *)view
 {
-    NSLog(@"Align view");
     [self _animateViewToEdges:view];
 }
 
@@ -172,8 +171,23 @@ typedef enum {
 - (void)_animateViewToConversationArea:(CHDraggableView *)view
 {
     CGRect conversationArea = [self _conversationArea];
-    CGPoint center = CGPointMake(CGRectGetMidX(conversationArea), CGRectGetMidY(conversationArea));
-    [view snapViewCenterToPoint:center edge:[self _destinationEdgeForReleasePointInCurrentState:view.center]];
+
+    CGPoint alignment = CGPointMake(CGRectGetMidX(conversationArea), CGRectGetMidY(conversationArea));
+    
+    switch (self.alignment) {
+        case CHAlignTopLeft:
+            alignment = CGPointMake(CGRectGetMinX(conversationArea) + 35, CGRectGetMidY(conversationArea));
+            break;
+        case CHAlignTopCenter:
+            alignment = CGPointMake(CGRectGetMidX(conversationArea), CGRectGetMidY(conversationArea));
+            break;
+        case CHAlignTopRight:
+            alignment = CGPointMake(CGRectGetMaxX(conversationArea) - 35, CGRectGetMidY(conversationArea));
+            break;
+        default:
+            break;
+    }
+    [view snapViewCenterToPoint:alignment edge:[self _destinationEdgeForReleasePointInCurrentState:view.center]];
 }
 
 #pragma mark - View Controller Handling

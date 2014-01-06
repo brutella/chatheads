@@ -16,10 +16,17 @@ typedef enum {
     CHSnappingEdgeLeft
 } CHSnappingEdge;
 
+typedef enum {
+    CHAlignTopLeft,
+    CHAlignTopCenter,
+    CHAlignTopRight
+} CHAlignment;
+
 @protocol CHDraggingCoordinatorDelegate;
 @interface CHDraggingCoordinator : NSObject <CHDraggableViewDelegate>
 
 @property (nonatomic) CHSnappingEdge snappingEdge;
+@property (nonatomic) CHAlignment alignment;
 @property (nonatomic, weak) id<CHDraggingCoordinatorDelegate> delegate;
 
 - (id)initWithWindow:(UIWindow *)window draggableViewBounds:(CGRect)bounds;
